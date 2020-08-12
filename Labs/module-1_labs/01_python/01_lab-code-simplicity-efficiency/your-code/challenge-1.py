@@ -17,6 +17,7 @@ c = input('Please choose your second number (zero to five): ')
 
 numbers = {'zero':0, 'one':1, 'two':2, 'three':3, 'four':4, 'five':5}
 
+
 if a in numbers and c in numbers:
   if b == 'plus':
       d = numbers[a] + numbers[c]
