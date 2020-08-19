@@ -1,0 +1,548 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>ContentFilters</key>
+	<dict/>
+	<key>auto_connect</key>
+	<true/>
+	<key>data</key>
+	<dict>
+		<key>connection</key>
+		<dict>
+			<key>database</key>
+			<string>olist</string>
+			<key>host</key>
+			<string>127.0.0.1</string>
+			<key>kcid</key>
+			<string>8538182464800515197</string>
+			<key>name</key>
+			<string>localhost</string>
+			<key>rdbms_type</key>
+			<string>mysql</string>
+			<key>sslCACertFileLocation</key>
+			<string></string>
+			<key>sslCACertFileLocationEnabled</key>
+			<integer>0</integer>
+			<key>sslCertificateFileLocation</key>
+			<string></string>
+			<key>sslCertificateFileLocationEnabled</key>
+			<integer>0</integer>
+			<key>sslKeyFileLocation</key>
+			<string></string>
+			<key>sslKeyFileLocationEnabled</key>
+			<integer>0</integer>
+			<key>type</key>
+			<string>SPTCPIPConnection</string>
+			<key>useSSL</key>
+			<integer>0</integer>
+			<key>user</key>
+			<string>root</string>
+		</dict>
+		<key>session</key>
+		<dict>
+			<key>connectionEncoding</key>
+			<string>utf8mb4</string>
+			<key>contentFilterV2</key>
+			<dict>
+				<key>children</key>
+				<array/>
+				<key>filterClass</key>
+				<string>groupNode</string>
+				<key>isConjunction</key>
+				<true/>
+			</dict>
+			<key>contentPageNumber</key>
+			<integer>1</integer>
+			<key>contentSelection</key>
+			<data>
+			YnBsaXN0MDDUAQIDBAUGBwpYJHZlcnNpb25ZJGFyY2hpdmVyVCR0
+			b3BYJG9iamVjdHMSAAGGoF8QD05TS2V5ZWRBcmNoaXZlctEICVRk
+			YXRhgAGoCwwXGBkaHiVVJG51bGzTDQ4PEBMWV05TLmtleXNaTlMu
+			b2JqZWN0c1YkY2xhc3OiERKAAoADohQVgASABYAHVHR5cGVUcm93
+			c18QHVNlbGVjdGlvbkRldGFpbFR5cGVOU0luZGV4U2V00hsPHB1c
+			TlNSYW5nZUNvdW50EACABtIfICEiWiRjbGFzc25hbWVYJGNsYXNz
+			ZXNaTlNJbmRleFNldKIjJFpOU0luZGV4U2V0WE5TT2JqZWN00h8g
+			JidcTlNEaWN0aW9uYXJ5oiYkAAgAEQAaACQAKQAyADcASQBMAFEA
+			UwBcAGIAaQBxAHwAgwCGAIgAigCNAI8AkQCTAJgAnQC9AMIAzwDR
+			ANMA2ADjAOwA9wD6AQUBDgETASAAAAAAAAACAQAAAAAAAAAoAAAA
+			AAAAAAAAAAAAAAABIw==
+			</data>
+			<key>contentSortColIsAsc</key>
+			<true/>
+			<key>contentViewport</key>
+			<string>{{0, 0}, {842, 604}}</string>
+			<key>isToolbarVisible</key>
+			<true/>
+			<key>queries</key>
+			<string>/*
+select*
+from orders
+
+SELECT 1; -- smallest query possible
+*/
+-- I am a comment
+
+/* 
+I am a comment block
+*/
+/*
+--------------
+-- Selecting a sample
+-- Clauses
+-- SELECT
+-- FROM
+-- LIMIT 
+--------------
+*/
+
+/*
+SELECT *
+FROM olist.customers -- Is not case sensitive
+*/
+-- The SELECT clause is jsut a projection of the table. You can select any columns, in any order, as many times 
+
+SELECT
+	customer_state,
+	customer_id, 
+	customer_unique_id
+FROM olist.customers;
+
+-- Selecting columns 
+
+SELECT 	
+	customer_state,
+	customer_city
+FROM olist.customers;
+LIMIT 10;
+
+-- Use the ORDER BY clause to sort output:
+SELECT *
+FROM olist.orders
+LIMIT 1000;
+
+SELECT * 
+FROM olist.orders
+ORDER BY order_purchase_timestamp DESC -- DESC for descending order 
+Limit 1000;
+
+-- Retrieve the most expensive product
+SELECT
+	product_id,
+	price
+FROM olist.order_items
+ORDER BY price DESC
+LIMIT 1;
+	
+-- Because the SELECT clause is just a prjection, you don't even need to add the column your are ordering by
+-- It will sort based on the underlaying data (which is what the FROM and WHERE 
+
+
+
+/* 
+--------------
+-- Filtering Rows
+--
+-- Clauses:
+-- WHERE
+--
+--------------
+*/
+
+SELECT *
+FROM olist.orders
+WHERE order_purchase_timestamp &gt;= '2018-02-01'
+	AND order_purchase_timestamp &lt; '2018-03-01'
+LIMIT 1000;
+
+-- only want custo ers from xxx
+SELECT *
+FROM olist.customers
+WHERE customer_state = 'BA'
+limit 100;
+
+-- Column transformation 
+
+SELECT *
+FROM olist.order_items
+LIMIT 1000;
+
+-- Transorm the price column into price categories ('cheap', 'Medium', 'Expensive')
+SELECT 
+	order_id,
+	product_id,
+	price,
+	IF(price &lt; 100, 'cheap', IF(price&lt;350, 'medium', 'expensive')) AS price_catagory
+FROM olist.order_items;
+
+-- Rewrite as case statement
+SELECT 
+	order_id,
+	product_id,
+	price,
+	CASE
+		WHEN price &lt; 100 THEN 'cheap'
+		WHEN price &lt; 350 THEN 'medium'
+		ELSE 'expensive'
+	END AS price_catagory
+FROM olist.order_items;
+
+
+/*---------------------
+ LAB 01
+---------------------*/
+-- Maximum 
+
+SELECT
+	price
+FROM olist.order_items
+ORDER BY price DESC
+LIMIT 1;
+
+-- Minimum
+	
+SELECT
+	price
+FROM olist.order_items
+ORDER BY price ASC
+LIMIT 1;
+
+-- Range 
+SELECT MIN(shipping_limit_date), MAX(shipping_limit_date)
+FROM olist.order_items;
+
+-- States with greatest number of customers
+SELECT 
+	customer_state,
+	COUNT(customer_state)
+FROM olist.customers
+GROUP BY customer_state
+ORDER BY COUNT(customer_state) DESC
+limit 3;
+
+-- Within state with greatest number of customers find 3 cities with most customers
+
+SELECT 
+	customer_city,
+	COUNT(customer_city)
+FROM olist.customers
+WHERE customer_state = 'SP'
+GROUP BY customer_city
+ORDER BY COUNT(customer_city) DESC
+limit 3;
+
+-- Clodes deal table, distinct business segments
+SELECT
+	COUNT(distinct business_segment) AS Number_of_distinct_business_segments
+FROM olist.closed_deals;
+
+
+-- Sum declared_monthly_revenue for duplicate row values in business_segment and find the 3 business segments with the highest declared monthly revenue (of those that declared revenue).
+SELECT
+	SUM(declared_monthly_revenue) AS Monthly_revenue_by_segment,
+	business_segment
+FROM closed_deals
+GROUP BY business_segment
+ORDER BY Monthly_revenue_by_segment DESC 
+LIMIT 3;
+
+-- Total number of distinct review score values
+SELECT
+	COUNT(DISTINCT review_score)
+FROM order_reviews;
+
+-- create a new column with a description that corresponds to each number category for each review score from 1 - 5.
+SELECT 
+	review_id,
+	order_id,
+	review_score,
+	review_comment_title,
+	review_comment_message,
+	review_creation_date,
+	review_answer_timestamp,
+	CASE
+		WHEN review_score = 1 THEN 'very bad'
+		WHEN review_score = 2 THEN 'bad'
+		WHEN review_score = 3 THEN 'ok'
+		WHEN review_score = 4 THEN 'good'
+		ELSE 'very good'
+	END AS review_catagory
+FROM order_reviews;
+
+-- review score occurring most frequently and how many times it occurs
+SELECT
+	review_score,
+	count(1)		AS review_count
+FROM order_reviews
+GROUP BY review_score
+ORDER BY review_count DESC
+LIMIT 1;
+
+/*---------------------
+ LAB 02
+---------------------*/
+-- Find the earliest and latest first_contact_date
+SELECT
+	MIN(first_contact_date),
+	MAX(first_contact_date)
+FROM marketing_qualified_leads;
+	
+-- Find the top 3 most frequent origin types for all first_contact_date entries in 2018
+SELECT 
+	origin
+FROM marketing_qualified_leads
+WHERE first_contact_date &gt;= '2018-01-01'
+	AND first_contact_date &lt; '2019-12-31'
+GROUP BY origin
+ORDER BY COUNT(origin) DESC
+LIMIT 3;
+
+-- Find the first_contact_date with the highest number of mql_id entries and state the number of entries on that date.
+SELECT 
+	first_contact_date,
+	COUNT(mql_id)	AS count_mql_id
+FROM marketing_qualified_leads
+GROUP BY first_contact_date
+ORDER BY count_mql_id DESC
+LIMIT 1;
+
+-- Find the name and count of the top 2 product category names
+SELECT
+	product_category_name,
+	COUNT(product_category_name) AS count_product_category
+FROM products
+GROUP BY product_category_name
+ORDER BY count_product_category DESC
+LIMIT 2;
+
+-- Find the product_category_name with the highest recorded product weight in grams.
+SELECT
+	product_category_name,
+	product_weight_g
+FROM products
+ORDER BY product_weight_g DESC
+LIMIT 1;
+
+-- Find the product_category_name with the greatest sum of dimensions including length, height and width in centimeters.
+SELECT 
+	product_category_name,
+	product_length_cm+product_height_cm+product_width_cm AS total_dimensions
+FROM products
+ORDER BY total_dimensions DESC
+LIMIT 1;
+
+-- Find the payment_type with the greatest number of order_id entries and the count of that payment type
+SELECT
+	payment_type,
+	COUNT(payment_type) AS count_payment_type
+FROM order_payments
+GROUP BY payment_type
+ORDER BY count_payment_type DESC
+LIMIT 1;
+
+-- Find the highest payment value for an individual order_id
+SELECT
+	payment_value
+FROM order_payments
+ORDER BY payment_value DESC
+LIMIT 1;
+
+-- Find the 3 seller states with the greatest number of distinct seller cities
+SELECT
+	seller_state,
+	COUNT(DISTINCT seller_city) AS seller_city_counter
+FROM sellers
+GROUP BY seller_state
+ORDER BY seller_city_counter DESC 
+LIMIT 3;</string>
+			<key>table</key>
+			<string>sellers</string>
+			<key>view</key>
+			<string>SP_VIEW_CUSTOMQUERY</string>
+			<key>windowVerticalDividerPosition</key>
+			<real>214</real>
+		</dict>
+	</dict>
+	<key>encrypted</key>
+	<false/>
+	<key>format</key>
+	<string>connection</string>
+	<key>queryFavorites</key>
+	<array/>
+	<key>queryHistory</key>
+	<array>
+		<string>-- Find the 3 seller states with the greatest number of distinct seller cities
+SELECT
+	seller_state,
+	COUNT(DISTINCT seller_city) AS seller_city_counter
+FROM sellers
+GROUP BY seller_state
+ORDER BY seller_city_counter DESC 
+LIMIT 3</string>
+		<string>-- Find the highest payment value for an individual order_id
+SELECT
+	payment_value
+FROM order_payments
+ORDER BY payment_value DESC
+LIMIT 1</string>
+		<string>-- Find the highest payment value for an individual order_id
+SELECT
+	payment_value
+FROM order_payments
+ORDER BY payment_value
+LIMIT 1</string>
+		<string>-- Find the payment_type with the greatest number of order_id entries and the count of that payment type
+
+SELECT
+	payment_type,
+	COUNT(payment_type) AS count_payment_type
+FROM order_payments
+GROUP BY payment_type
+ORDER BY count_payment_type DESC
+LIMIT 1</string>
+		<string>-- Find the payment_type with the greatest number of order_id entries and the count of that payment type
+
+SELECT
+	payment_type,
+	COUNT(payment_type) AS count_payment_type
+FROM order_payments
+GROUP BY payment_type
+ORDER BY count_payment_type
+LIMIT 1</string>
+		<string>-- Find the product_category_name with the greatest sum of dimensions including length, height and width in centimeters.
+
+SELECT 
+	product_category_name,
+	product_length_cm+product_height_cm+product_width_cm AS total_dimensions
+FROM products
+ORDER BY total_dimensions DESC
+LIMIT 1</string>
+		<string>-- Find the product_category_name with the greatest sum of dimensions including length, height and width in centimeters.
+
+SELECT 
+	product_category_name,
+	SUM(product_length_cm+product_height_cm+product_width_cm) AS total_dimensions
+FROM products
+GROUP BY product_category_name
+ORDER BY total_dimensions DESC
+LIMIT 1</string>
+		<string>-- Find the product_category_name with the greatest sum of dimensions including length, height and width in centimeters.
+
+SELECT 
+	product_id, 
+	SUM(product_length_cm*product_height_cm*product_width_cm) AS total_dimensions
+FROM products
+GROUP BY product_id
+ORDER BY total_dimensions DESC
+LIMIT 1</string>
+		<string>-- Find the product_category_name with the greatest sum of dimensions including length, height and width in centimeters.
+
+SELECT 
+	product_category_name,
+	product_id, 
+	SUM(product_length_cm*product_height_cm*product_width_cm) AS total_dimensions
+FROM products
+GROUP BY product_id
+ORDER BY total_dimensions DESC
+LIMIT 1</string>
+		<string>-- Find the product_category_name with the greatest sum of dimensions including length, height and width in centimeters.
+
+SELECT 
+	product_category_name,
+	SUM(product_length_cm*product_height_cm*product_width_cm) AS total_dimensions
+FROM products
+ORDER BY total_dimensions DESC
+LIMIT 1</string>
+		<string>-- Find the product_category_name with the greatest sum of dimensions including length, height and width in centimeters.
+
+SELECT 
+	product_category_name,
+	SUM(product_length_cm*product_height_cm*product_width_cm) AS total_dimensions
+FROM products
+GROUP BY total_dimensions
+ORDER BY total_dimensions DESC
+LIMIT 1</string>
+		<string>-- Find the product_category_name with the greatest sum of dimensions including length, height and width in centimeters.
+
+SELECT 
+	product_category_name,
+	SUM(product_length_cm*product_height_cm*product_width_cm) AS total_dimensions
+FROM products
+GROUP BY product_category_name
+ORDER BY total_dimensions DESC
+LIMIT 1</string>
+		<string>-- Find the product_category_name with the greatest sum of dimensions including length, height and width in centimeters.
+
+SELECT 
+	product_category_name
+	SUM(product_length_cm*product_height_cm*product_width_cm) AS total_dimensions
+FROM products
+ORDER BY total_dimensions DESC
+LIMIT 1</string>
+		<string>-- Find the product_category_name with the greatest sum of dimensions including length, height and width in centimeters.
+
+SELECT 
+	product_category_name
+	SUM(product_length_cm+product_height_cm+product_width_cm) AS total_dimensions
+FROM products
+ORDER BY total_dimensions DESC
+LIMIT 1</string>
+		<string>-- Find the product_category_name with the greatest sum of dimensions including length, height and width in centimeters.
+
+SELECT 
+	product_category_name
+	SUM(product_length_cm + product_height_cm + product_width_cm) AS total_dimensions
+FROM products
+ORDER BY total_dimensions DESC
+LIMIT 1</string>
+		<string>-- Find the product_category_name with the greatest sum of dimensions including length, height and width in centimeters.
+
+SELECT 
+	product_category_name
+	SUM(product_length_cm, product_height_cm, product_width_cm) AS total_dimensions
+FROM products
+ORDER BY total_dimensions DESC
+LIMIT 1</string>
+		<string>-- Find the product_category_name with the highest recorded product weight in grams.
+
+SELECT
+	product_category_name,
+	product_weight_g
+FROM products
+ORDER BY product_weight_g DESC
+LIMIT 1</string>
+		<string>-- Find the product_category_name with the highest recorded product weight in grams.
+
+SELECT
+	product_category_name,
+	product_weight_g
+FROM products
+GROUP BY product_category_name
+ORDER BY product_weight_g DESC
+LIMIT 1</string>
+		<string>-- Find the product_category_name with the highest recorded product weight in grams.
+
+SELECT
+	product_category_name,
+	product_category_name
+FROM products
+GROUP BY product_category_name
+ORDER BY product_weight_g DESC
+LIMIT 1</string>
+		<string>-- Find the name and count of the top 2 product category names
+SELECT
+	product_category_name,
+	COUNT(product_category_name) AS count_product_category
+FROM products
+GROUP BY product_category_name
+ORDER BY count_product_category DESC
+LIMIT 2</string>
+	</array>
+	<key>rdbms_type</key>
+	<string>mysql</string>
+	<key>rdbms_version</key>
+	<string>8.0.20</string>
+	<key>version</key>
+	<integer>1</integer>
+</dict>
+</plist>
